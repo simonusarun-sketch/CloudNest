@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CloudNest</title>
+<style>
+:root{--bg:#eef1f8;--card:#f5f7fc;--tx:#2b3050;--mu:#7a819e;--ac:#6c7bff;--ac2:#8f9bff;--ok:#2fb47c;--er:#e5566d;--hi:#fff;--sh:#c9cfe3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1d2033;--card:#252940;--tx:#e8eaf6;--mu:#9aa0c0;--hi:#2f3450;--sh:#15172a}}
+:root[data-theme=dark]{--bg:#1d2033;--card:#252940;--tx:#e8eaf6;--mu:#9aa0c0;--hi:#2f3450;--sh:#15172a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit;color:inherit}
+.clay{background:var(--card);border-radius:28px;box-shadow:10px 10px 22px var(--sh),-8px -8px 18px var(--hi),inset 2px 2px 4px var(--hi);padding:22px;transition:transform .2s,box-shadow .2s}
+.hov:hover{transform:translateY(-4px)}
+.btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;border:0;cursor:pointer;background:var(--card);border-radius:20px;padding:14px 22px;min-height:48px;font-weight:600;box-shadow:6px 6px 14px var(--sh),-5px -5px 12px var(--hi);transition:.15s;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.96);box-shadow:inset 3px 3px 8px var(--sh),inset -3px -3px 8px var(--hi)}
+.btn.p{background:linear-gradient(145deg,var(--ac2),var(--ac));color:#fff;box-shadow:6px 6px 14px var(--sh),-4px -4px 10px var(--hi),inset 2px 2px 4px rgba(255,255,255,.35)}
+.btn.d{color:var(--er)}.btn.sm{padding:8px 14px;min-height:38px;border-radius:14px}
+input,textarea{width:100%;border:0;border-radius:18px;padding:14px 16px;background:var(--bg);box-shadow:inset 4px 4px 9px var(--sh),inset -4px -4px 9px var(--hi);outline:0;min-height:48px}
+input:focus,textarea:focus{outline:2px solid var(--ac2)}
+label{display:block;font-size:.85rem;font-weight:600;margin:14px 0 6px;color:var(--mu)}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 18px 110px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:10px}
+.logo{font-weight:800;font-size:1.3rem;cursor:pointer}
+.links{display:flex;gap:8px;flex-wrap:wrap}.links .btn.on{color:var(--ac)}
+.bn{display:none;position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));justify-content:space-around;padding:8px;z-index:5;border-radius:26px}
+.bn button{border:0;background:none;cursor:pointer;padding:8px 10px;border-radius:16px;font-size:.75rem;display:flex;flex-direction:column;align-items:center;min-width:64px;min-height:48px}.bn button.on{color:var(--ac);font-weight:700}
+@media(max-width:700px){.links{display:none}.bn{display:flex}.hide-m{display:none}}
+.hero{text-align:center;padding:50px 0 30px}.hero h1{font-size:clamp(2rem,6vw,3.4rem);margin:10px 0}.hero p{color:var(--mu);font-size:1.1rem}
+.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.auth{max-width:440px;margin:30px auto}.err{color:var(--er);font-size:.85rem;min-height:1.2em;margin-top:8px}
+.bar{height:14px;border-radius:9px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--sh),inset -2px -2px 5px var(--hi);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac));border-radius:9px;transition:width .3s}
+.drop{text-align:center;border:2px dashed var(--ac2);padding:36px 20px}.drop.over{transform:scale(1.02)}
+.ov{position:relative;overflow:hidden}.ov input{position:absolute;inset:0;width:100%;height:100%;min-height:0;opacity:0;cursor:pointer;padding:0;font-size:0;box-shadow:none}
+.vh{position:absolute;width:1px;height:1px;min-height:0;opacity:0;overflow:hidden;pointer-events:none;padding:0}
+label.btn{margin:0;color:var(--tx);font-size:1rem}label.btn.p{color:#fff}
+.ico{font-size:2.6rem}.mu{color:var(--mu);font-size:.85rem}
+.thumb{height:120px;border-radius:20px;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:12px;box-shadow:inset 3px 3px 7px var(--sh),inset -3px -3px 7px var(--hi)}.thumb img{width:100%;height:100%;object-fit:cover}
+.card{cursor:pointer;position:relative}.card h3{margin:0 0 4px;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fav{position:absolute;top:12px;right:12px;background:var(--card);border:0;border-radius:50%;width:40px;height:40px;cursor:pointer;box-shadow:3px 3px 7px var(--sh),-3px -3px 7px var(--hi);font-size:1.1rem}
+.modal{position:fixed;inset:0;background:rgba(20,22,40,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20;animation:f .2s}.modal .clay{max-width:380px;width:100%;text-align:center;animation:pop .25s}
+@keyframes f{from{opacity:0}}@keyframes pop{from{transform:scale(.9);opacity:0}}@keyframes up{from{transform:translateY(10px);opacity:0}}
+#v{animation:up .3s}.toast{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:30;animation:up .3s}
+.up{margin:12px 0}.up .bar{margin:6px 0}
+.pv{width:100%;height:420px;border:0;border-radius:20px;background:var(--bg)}.pv.img{height:auto;max-height:480px;object-fit:contain}
+.sm-t{font-size:.8rem}.str{height:6px;border-radius:4px;background:var(--bg);margin-top:8px;overflow:hidden}.str i{display:block;height:100%;transition:.3s}
+footer{text-align:center;color:var(--mu);margin-top:50px;font-size:.9rem}footer a{margin:0 10px;color:var(--mu)}
+</style></head><body>
+<div id="app"></div><div id="m"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// ====== 1. PASTE YOUR SUPABASE PROJECT VALUES HERE (Project Settings > API) ======
+const CFG={url:"https://jdlnuuzakugpecgtfpmm.supabase.co",key:"sb_publishable_AZOToGUpkrSeaShVvEo7rw_hD_8dxFB"}; // anon key is public by design; Row Level Security protects data
+// =================================================================================
+const $=s=>document.querySelector(s),E=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const MIME={pdf:"application/pdf",jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png",webp:"image/webp",doc:"application/msword",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",ppt:"application/vnd.ms-powerpoint",pptx:"application/vnd.openxmlformats-officedocument.presentationml.presentation",txt:"text/plain"};
+const MAX=25*1048576,QUOTA=10*1073741824,BK="files",IMG=["jpg","jpeg","png","webp"];
+const IC={pdf:"📄",jpg:"🖼️",jpeg:"🖼️",png:"🖼️",webp:"🖼️",doc:"📝",docx:"📝",ppt:"📊",pptx:"📊",txt:"📃"};
+const ext=n=>(n.split(".").pop()||"").toLowerCase(),sz=b=>b>1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB";
+const dt=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),uid=()=>crypto.randomUUID();
+const strength=p=>{let s=0;if(p.length>=8)s++;if(/[a-z]/.test(p)&&/[A-Z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^\w]/.test(p))s++;return s};
+const ready=!CFG.url.startsWith("YOUR_");
+const sb=ready?window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,flowType:"pkce"}}):null;
+let U=null,PR=null,FS=[],q="",urls={};
+const norm=r=>{const t=Array.isArray(r.trash)?r.trash[0]:r.trash;return{id:r.id,name:r.original_filename,title:r.title,desc:r.description,type:r.file_type,size:r.file_size,path:r.storage_path,fav:r.is_favorite,deletedAt:t?+new Date(t.deleted_at):null,created:+new Date(r.created_at),updated:+new Date(r.updated_at)}};
+const mine=id=>FS.find(f=>f.id===id);
+const used=()=>FS.reduce((a,f)=>a+f.size,0);
+const toast=(t,c)=>{const d=document.createElement("div");d.className="clay toast";d.style.color=c||"var(--ok)";d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2600)};
+const confirmM=(t,s,ok,cb)=>{$("#m").innerHTML=`<div class="modal"><div class="clay"><h2>${t}</h2><p class="mu">${s}</p><div class="row"><button class="btn" id="c1">Cancel</button><button class="btn p" id="c2">${ok}</button></div></div></div>`;$("#c1").onclick=()=>$("#m").innerHTML="";$("#c2").onclick=()=>{$("#m").innerHTML="";cb()}};
+const inputM=(t,s,ph,type,ok,cb)=>{$("#m").innerHTML=`<div class="modal"><div class="clay"><h2>${t}</h2><p class="mu">${s}</p><input id="mi" type="${type}" placeholder="${ph}"><div class="err" id="me"></div><div class="row"><button class="btn" id="c1">Cancel</button><button class="btn p" id="c2">${ok}</button></div></div></div>`;$("#c1").onclick=()=>$("#m").innerHTML="";$("#c2").onclick=async()=>{const e=await cb($("#mi").value.trim());if(e)$("#me").textContent=e;else $("#m").innerHTML=""}};
+const go=h=>{location.hash=h};
+const nav=()=>{const r=location.hash.slice(2).split("/")[0];const it=[["dash","☁️","Home"],["files","📁","My Files"],["favs","⭐","Favorites"],["profile","👤","Profile"]];
+return `<div class="nav"><div class="logo" onclick="go('/dash')">☁️ CloudNest</div><div class="links">${it.map(x=>`<button class="btn sm ${r==x[0]?"on":""}" onclick="go('/${x[0]}')">${x[2]}</button>`).join("")}<button class="btn sm" onclick="go('/trash')">🗑 Trash</button><button class="btn sm d" onclick="logout()">Logout</button></div></div>`
++`<div class="clay bn">${it.map(x=>`<button class="${r==x[0]?"on":""}" onclick="go('/${x[0]}')"><span style="font-size:1.4rem">${x[1]}</span>${x[2].replace("My ","")}</button>`).join("")}</div>`};
+const logout=()=>confirmM("Are you sure you want to logout?","You'll need to log in again to see your files.","Logout",async()=>{await sb.auth.signOut();U=null;PR=null;FS=[];urls={};go("/login")});
+const emptyS=`<div class="clay" style="text-align:center;padding:50px 20px"><div class="ico">☁️</div><h2>Your cloud is empty</h2><p class="mu">Upload your first file to get started.</p><button class="btn p" onclick="go('/dash')">+ Upload File</button></div>`;
+const cardH=f=>`<div class="clay card hov" onclick="go('/file/${f.id}')"><button class="fav" onclick="event.stopPropagation();fav('${f.id}')" aria-label="Favorite">${f.fav?"⭐":"☆"}</button><div class="thumb">${urls[f.id]?`<img alt="" src="${urls[f.id]}">`:`<span class="ico">${IC[f.type]}</span>`}</div><h3>${E(f.title||f.name)}</h3><div class="mu sm-t" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${E(f.name)}</div><div class="mu sm-t">${f.type.toUpperCase()} • ${sz(f.size)}</div><div class="mu sm-t">${dt(f.created)}</div></div>`;
+const storage=()=>{const u=used();return `<div class="clay"><b>Used Storage</b><h2 style="margin:6px 0">${sz(u)} / 10 GB</h2><div class="bar"><i style="width:${Math.max(1,u/QUOTA*100)}%"></i></div></div>`};
+// ---- data ----
+const loadAll=async()=>{urls={};
+if(!PR||PR.id!==U.id){const r=await sb.from("profiles").select("*").eq("id",U.id).single();if(r.error)throw r.error;PR=r.data}
+const r=await sb.from("files").select("*, trash(deleted_at)").eq("user_id",U.id).order("created_at",{ascending:false});if(r.error)throw r.error;FS=r.data.map(norm);
+const im=FS.filter(f=>!f.deletedAt&&IMG.includes(f.type));
+if(im.length){const s=await sb.storage.from(BK).createSignedUrls(im.map(f=>f.path),3600);(s.data||[]).forEach(x=>{const f=im.find(i=>i.path===x.path);if(f&&x.signedUrl)urls[f.id]=x.signedUrl})}};
+const fav=async id=>{const f=mine(id),r=await sb.from("files").update({is_favorite:!f.fav}).eq("id",id).eq("user_id",U.id);if(r.error)return toast("Could not update","var(--er)");route()};
+const restore=async id=>{const r=await sb.from("trash").delete().eq("file_id",id).eq("user_id",U.id);if(r.error)return toast("Could not restore","var(--er)");toast("Restored ✓");route()};
+const perm=id=>confirmM("Delete forever?","This can't be undone.","Delete",async()=>{const f=mine(id);await sb.storage.from(BK).remove([f.path]);const r=await sb.from("files").delete().eq("id",id).eq("user_id",U.id);if(r.error)return toast("Could not delete","var(--er)");route()});
+const saveMeta=async(f,t,d)=>{const r=await sb.from("files").update({title:t.trim()||f.name,description:d}).eq("id",f.id).eq("user_id",U.id);if(r.error)return toast("Could not save","var(--er)");f.title=t.trim()||f.name;f.desc=d;toast("Saved ✓")};
+// ---- upload (real progress via XHR to Supabase Storage, using the user's session token) ----
+const upzone=()=>`<div class="clay drop" id="dz"><div class="ico">☁️</div><h2>Upload your files</h2><p class="mu">PDFs • Images • Documents</p><div class="row"><span class="btn p ov">+ Choose Files<input type="file" id="fi" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.ppt,.pptx,.txt,image/*"></span><span class="btn ov">📷 Take Photo<input type="file" id="ci" accept="image/*" capture="environment"></span></div><div class="mu sm-t" id="us" style="margin-top:10px"></div><div id="ul" style="text-align:left;margin-top:18px"></div></div>`;
+const bindUp=()=>{const dz=$("#dz");if(!dz)return;if(self!==top)$("#us").textContent="⚠️ Tapping does nothing? Open this page in Chrome or Safari.";const fi=$("#fi"),ci=$("#ci");fi.onchange=()=>{upload([...fi.files]);fi.value=""};ci.onchange=()=>{upload([...ci.files].map(f=>new File([f],"Photo "+new Date().toLocaleString("en-GB").replace(/[/:,]/g,"-")+".jpg",{type:"image/jpeg"})));ci.value=""};
+["dragover","dragenter"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.add("over")}));["dragleave","drop"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.remove("over")}));dz.addEventListener("drop",ev=>upload([...ev.dataTransfer.files]))};
+const upload=files=>{const u=$("#us");if(u)u.textContent=files.length?files.length+" file(s) selected":"";files.forEach(async file=>{const id=uid(),t=ext(file.name),row=document.createElement("div");row.className="up";
+row.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px"><span>${E(file.name)}</span><span class="mu" id="p${id}">0%</span></div><div class="bar"><i id="b${id}" style="width:0"></i></div><div class="err" id="e${id}"></div>`;$("#ul").prepend(row);
+const fail=m=>{$("#e"+id).textContent=m;$("#b"+id).style.background="var(--er)"};
+if(!MIME[t])return fail("Unsupported file type.");if(file.size>MAX)return fail("File too large (max 25 MB).");if(!file.size)return fail("File is empty.");if(used()+file.size>QUOTA)return fail("Not enough storage.");
+const path=`${U.id}/${id}.${t}`,{data:{session}}=await sb.auth.getSession();if(!session)return fail("Session expired. Please log in again.");
+const x=new XMLHttpRequest();x.open("POST",`${CFG.url}/storage/v1/object/${BK}/${path}`);x.setRequestHeader("Authorization","Bearer "+session.access_token);x.setRequestHeader("apikey",CFG.key);x.setRequestHeader("x-upsert","false");
+const fd=new FormData();fd.append("cacheControl","3600");fd.append("",new Blob([file],{type:MIME[t]}));
+x.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(e.loaded/e.total*95);$("#b"+id).style.width=p+"%";$("#p"+id).textContent=p+"%"}};
+x.onerror=()=>fail("Network error. Your other files are safe.");
+x.onload=async()=>{if(x.status>299)return fail("Upload rejected by server.");
+const ins=await sb.from("files").insert({id,user_id:U.id,original_filename:file.name,title:file.name.replace(/\.[^.]+$/,""),description:"",file_type:t,file_size:file.size,storage_path:path}).select("*, trash(deleted_at)").single();
+if(ins.error){await sb.storage.from(BK).remove([path]);return fail(/quota/i.test(ins.error.message)?"Not enough storage.":"Could not save file.")}
+const f=norm(ins.data);FS.unshift(f);$("#b"+id).style.width="100%";$("#p"+id).textContent="100% ✓";
+row.insertAdjacentHTML("beforeend",`<label>File Title</label><input id="t${id}" value="${E(f.title)}"><label>Notes / Description</label><textarea id="d${id}" rows="2" placeholder="Important formulas and examination notes."></textarea><button class="btn p sm" style="margin-top:10px" id="s${id}">Save</button>`);
+$("#s"+id).onclick=async()=>{await saveMeta(f,$("#t"+id).value,$("#d"+id).value);$("#s"+id).textContent="Saved ✓"}};x.send(fd)})};
+// ---- views ----
+const V={
+home:()=>`<div class="wrap"><div class="nav"><div class="logo">☁️ CloudNest</div></div><div class="hero"><h1>Your private space in the cloud.</h1><p>Store, organize and access your important files anywhere.</p><div class="row" style="margin-top:24px"><button class="btn" onclick="go('/login')">Login</button><button class="btn p" onclick="go('/signup')">Create Account</button></div></div>
+<div class="grid">${[["🔒","Private","Your files belong only to your account."],["☁️","Cloud Storage","Keep your PDFs, images and documents in one place."],["📱","Anywhere","Access your files from your phone or computer."]].map(x=>`<div class="clay hov"><div class="ico">${x[0]}</div><h3>${x[1]}</h3><p class="mu">${x[2]}</p></div>`).join("")}</div>
+<footer><b>CloudNest</b><br><a href="#/">Privacy</a><a href="#/">Terms</a><a href="#/">Contact</a></footer></div>`,
+login:()=>`<div class="wrap"><div class="logo" onclick="go('/')">☁️ CloudNest</div><div class="clay auth"><h1>Welcome Back 👋</h1><label>Username or Email</label><input id="u" autocomplete="username"><label>Password</label><div style="display:flex;gap:8px"><input id="p" type="password" autocomplete="current-password"><button class="btn sm" id="sh" type="button">Show</button></div><div class="err" id="er"></div><button class="btn p" style="width:100%;margin-top:8px" id="go">Login</button><p class="mu" style="text-align:center"><a href="#/login" onclick="forgot();return false">Forgot Password</a> · <a href="#/signup">Create Account</a></p></div></div>`,
+signup:()=>`<div class="wrap"><div class="logo" onclick="go('/')">☁️ CloudNest</div><div class="clay auth"><h1>Create Account</h1>${[["n","Full Name","name"],["u","Username","username"],["e","Email","email"]].map(x=>`<label>${x[1]}</label><input id="${x[0]}" autocomplete="${x[2]}">`).join("")}<label>Password</label><input id="p" type="password" autocomplete="new-password"><div class="str"><i id="sb"></i></div><div class="mu sm-t" id="st">8+ characters, upper & lower case, a number, a symbol</div><label>Confirm Password</label><input id="p2" type="password" autocomplete="new-password"><div class="err" id="er"></div><button class="btn p" style="width:100%;margin-top:8px" id="go">Create Account</button><p class="mu" style="text-align:center">Have an account? <a href="#/login">Login</a></p></div></div>`,
+dash:()=>`<div class="wrap">${nav()}<h1 style="margin-bottom:4px">Welcome back 👋</h1><p class="mu" style="margin-top:0">Everything you save, in one place.</p>${storage()}<div style="height:20px"></div>${upzone()}${FS.filter(f=>!f.deletedAt).length?`<h2>Recent files</h2><div class="grid">${FS.filter(f=>!f.deletedAt).slice(0,4).map(cardH).join("")}</div>`:""}</div>`,
+files:t=>`<div class="wrap">${nav()}<h1>${t=="favs"?"⭐ Favorites":"📁 My Files"}</h1><input id="sq" placeholder="Search your files..." value="${E(q)}"><div style="height:18px"></div><div id="res"></div></div>`,
+trash:()=>{const l=FS.filter(f=>f.deletedAt);return `<div class="wrap">${nav()}<h1>🗑 Trash</h1>${l.length?`<div class="grid">${l.map(f=>`<div class="clay"><div class="ico">${IC[f.type]}</div><h3>${E(f.title||f.name)}</h3><p class="mu sm-t">Deleted ${dt(f.deletedAt)}</p><div class="row"><button class="btn sm" onclick="restore('${f.id}')">Restore</button><button class="btn sm d" onclick="perm('${f.id}')">Delete forever</button></div></div>`).join("")}</div>`:`<div class="clay mu" style="text-align:center">Trash is empty.</div>`}</div>`},
+profile:()=>`<div class="wrap">${nav()}<h1>👤 Profile</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"><div class="clay"><h2>${E(PR.name)}</h2><p class="mu">@${E(PR.username)}<br>${E(U.email)}<br>Member since ${dt(PR.created_at)}</p></div>${storage()}<div class="clay"><h3>Change password</h3><input id="op" type="password" placeholder="Current password"><div style="height:8px"></div><input id="np" type="password" placeholder="New password (8+ chars, mixed)"><div class="err" id="er"></div><button class="btn p" id="cp">Update</button></div></div><div style="height:20px"></div><button class="btn d" onclick="logout()">Logout</button></div>`,
+file:(f,pu,du)=>{if(!f||f.deletedAt)return `<div class="wrap">${nav()}<div class="clay">File not found.</div></div>`;
+const pv=IMG.includes(f.type)?`<img class="pv img" alt="" src="${pu}">`:f.type=="pdf"?`<iframe class="pv" src="${pu}"></iframe>`:`<div class="thumb"><span class="ico">${IC[f.type]}</span></div>`;
+return `<div class="wrap">${nav()}<button class="btn sm" onclick="history.back()">← Back</button><div class="clay" style="margin-top:16px">${pv}<h2>${E(f.name)}</h2><p class="mu">${f.type.toUpperCase()} • ${sz(f.size)} • Uploaded ${dt(f.created)}</p><label>Title</label><input id="t" value="${E(f.title)}"><label>Notes</label><textarea id="d" rows="4">${E(f.desc)}</textarea><div class="row" style="justify-content:flex-start;margin-top:18px"><button class="btn p" id="sv">💾 Save Changes</button><a class="btn" style="text-decoration:none;color:inherit" target="_blank" rel="noopener" href="${pu}">👁 View</a><a class="btn" style="text-decoration:none;color:inherit" href="${du}">⬇ Download</a><button class="btn" id="fv">${f.fav?"⭐ Unfavorite":"☆ Favorite"}</button><button class="btn d" id="dl">🗑 Delete</button></div></div></div>`}};
+const list=t=>{const s=q.toLowerCase(),l=FS.filter(f=>!f.deletedAt&&(t!="favs"||f.fav)&&(!s||[f.title,f.name,f.desc,f.type].some(x=>(x||"").toLowerCase().includes(s))));$("#res").innerHTML=l.length?`<div class="grid">${l.map(cardH).join("")}</div>`:(q?`<div class="clay mu" style="text-align:center">No matches.</div>`:t=="favs"?`<div class="clay mu" style="text-align:center">No favorites yet. Tap ☆ on a file.</div>`:emptyS)};
+// ---- auth ----
+const forgot=()=>inputM("Reset password","We'll email you a reset link.","Your email","email","Send link",async e=>{if(!/^\S+@\S+\.\S+$/.test(e))return "Enter a valid email.";await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});toast("If that email exists, a link was sent.","var(--mu)")});
+const auth=async m=>{const er=$("#er"),b=$("#go");er.textContent="";b.disabled=true;
+try{if(m=="login"){let id=$("#u").value.trim().toLowerCase();if(!id||!$("#p").value)return er.textContent="Enter your username/email and password.";
+if(!id.includes("@")){const r=await sb.rpc("email_for_login",{ident:id});id=r.data||"nobody@invalid.invalid"}
+const r=await sb.auth.signInWithPassword({email:id,password:$("#p").value});if(r.error)return er.textContent=/rate|too many/i.test(r.error.message)?"Too many attempts. Wait a minute.":"Incorrect username/email or password.";go("/dash")}
+else{const n=$("#n").value.trim(),k=$("#u").value.trim().toLowerCase(),e=$("#e").value.trim().toLowerCase(),p=$("#p").value;
+if(!n||!/^[a-z0-9_]{3,20}$/.test(k))return er.textContent="Enter your name and a username (3-20 letters, numbers, _).";if(!/^\S+@\S+\.\S+$/.test(e))return er.textContent="Enter a valid email.";
+if(strength(p)<4)return er.textContent="Password needs 8+ chars, upper & lower case, a number and a symbol.";if(p!=$("#p2").value)return er.textContent="Passwords don't match.";
+const av=await sb.rpc("username_available",{u:k});if(av.data===false)return er.textContent="That username is taken.";
+const r=await sb.auth.signUp({email:e,password:p,options:{data:{name:n,username:k}}});if(r.error)return er.textContent=r.error.message;
+if(r.data.session)go("/dash");else{er.style.color="var(--ok)";er.textContent="Check your email to confirm your account, then log in."}}}
+catch{er.textContent="Something went wrong. Check your connection."}finally{b.disabled=false}};
+// ---- router ----
+const route=async()=>{const app=$("#app"),[r,a]=location.hash.slice(2).split("/"),PRT=["dash","files","favs","trash","profile","file"];
+if(!ready){app.innerHTML=`<div class="wrap"><div class="clay auth"><h2>Setup needed</h2><p class="mu">Open <b>index.html</b> and paste your Supabase URL and anon key at the top of the script.</p></div></div>`;return}
+app.innerHTML=`<div class="wrap"><p class="mu">Loading…</p></div>`;
+const{data:{session}}=await sb.auth.getSession();U=session?.user||null;
+if(PRT.includes(r)&&!U)return go("/login");if(U&&(!r||r=="login"||r=="signup"))return go("/dash");
+if(!U){PR=null;FS=[]}
+else try{await loadAll()}catch(e){app.innerHTML=`<div class="wrap"><div class="clay">Could not load your data. <button class="btn sm" onclick="route()">Retry</button></div></div>`;return}
+if(!r)app.innerHTML=V.home();
+else if(r=="login"||r=="signup"){app.innerHTML=V[r]();$("#go").onclick=()=>auth(r);app.onkeydown=e=>{if(e.key=="Enter")auth(r)};
+if(r=="login")$("#sh").onclick=()=>{const p=$("#p");p.type=p.type=="password"?"text":"password";$("#sh").textContent=p.type=="text"?"Hide":"Show"};
+else $("#p").oninput=e=>{const s=strength(e.target.value);$("#sb").style.width=s*25+"%";$("#sb").style.background=["var(--er)","var(--er)","#e5a03a","#9ac53a","var(--ok)"][s];$("#st").textContent=["Too weak","Weak","Fair","Good","Strong"][s]}}
+else if(r=="files"||r=="favs"){app.innerHTML=V.files(r);list(r);$("#sq").oninput=e=>{q=e.target.value;list(r)}}
+else if(r=="file"){const f=mine(a);let pu="",du="";if(f&&!f.deletedAt){const s=sb.storage.from(BK);[pu,du]=(await Promise.all([s.createSignedUrl(f.path,3600),s.createSignedUrl(f.path,3600,{download:f.name})])).map(x=>x.data?.signedUrl||"")}
+app.innerHTML=V.file(f,pu,du);if(f&&!f.deletedAt){$("#sv").onclick=()=>saveMeta(f,$("#t").value,$("#d").value);$("#fv").onclick=()=>fav(a);
+$("#dl").onclick=()=>confirmM("Delete this file?","This file will be moved to Trash.","Move to Trash",async()=>{const x=await sb.from("trash").insert({file_id:a,user_id:U.id});if(x.error)return toast("Could not delete","var(--er)");toast("Moved to Trash");go("/files")})}}
+else if(V[r]){app.innerHTML=V[r]();if(r=="dash")bindUp();if(r=="profile")$("#cp").onclick=async()=>{const er=$("#er");const c=await sb.auth.signInWithPassword({email:U.email,password:$("#op").value});if(c.error)return er.textContent="Current password is wrong.";if(strength($("#np").value)<4)return er.textContent="New password is too weak.";const u=await sb.auth.updateUser({password:$("#np").value});if(u.error)return er.textContent=u.error.message;er.textContent="";$("#op").value=$("#np").value="";toast("Password updated ✓")}}
+else go("/");scrollTo(0,0)};
+addEventListener("hashchange",route);
+if(ready)sb.auth.onAuthStateChange(ev=>{if(ev=="PASSWORD_RECOVERY")setTimeout(()=>{go("/profile");inputM("Set a new password","Choose a strong password.","New password","password","Update",async p=>{if(strength(p)<4)return "Use 8+ chars with upper & lower case, a number and a symbol.";const r=await sb.auth.updateUser({password:p});if(r.error)return r.error.message;toast("Password updated ✓")})},400)});
+route();
+</script></body></html>
